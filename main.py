@@ -14,10 +14,13 @@ if place:
         filtered_data = get_data(place, days)
 
         if option == 'Temperature':
-            temperatures = [dict['main']['temp'] for dict in filtered_data]
+            c_temperatures = [dict['main']['temp'] / 10 for dict in filtered_data]
+            f_temperatures = [round((dict['main']['temp'] / 10) * (5/9) + 32, 3)
+                                 for dict in filtered_data]
             dates = [dict['dt_txt'] for dict in filtered_data]
-            figure = px.line(x=dates, y=temperatures, 
-                            labels={"x": "Date", "y": "Temperature (C)"})
+            figure = px.line(x=dates, y=c_temperatures, 
+                            labels={"x": "Date", "y": "Temperature (C)"}, 
+                            hover_data={"Temperature (F)": f_temperatures})
 
             st.plotly_chart(figure)
         if option == 'Sky':
